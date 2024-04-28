@@ -13,7 +13,7 @@ class Imagination(Generator):
                  save_cache=None,
                  generator="Stable Diffusion v1.4",
                  mode="Image-to-image"):
-        super.__init__()
+        super().__init__()
         self.prompt = ["$$ in dark environment", 
                         "low-light $$"] 
         Stable_Diffusion_list = ["Stable Diffusion v1.4"]
