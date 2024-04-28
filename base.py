@@ -1,5 +1,5 @@
 class Generator():
-    def __init(self):
+    def __init__(self):
         self.version = 0.1
     def __call__(self, x):
         return self.forward(x)
