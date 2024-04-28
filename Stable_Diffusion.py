@@ -7,10 +7,10 @@ class Diffusion_Generator(Generator):
         from diffusers import StableDiffusionImg2ImgPipeline
         from huggingface_hub import notebook_login
         notebook_login()
+        cache_dir = save_dir if save_dir != None else './Stable_Diffusion/cache'
 
         if version == 'Stable Diffusion v1.4':
-            model_path = "CompVis/stable-diffusion-v1-4"
-            cache_dir = save_dir if save_dir != None else './Stable_Diffusion/cache'
+            model_path = "CompVis/stable-diffusion-v1-4"    
             self.pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
                                                 model_path,
                                                 revision="fp16", 

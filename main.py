@@ -5,6 +5,8 @@ from torch import autocast
 from tqdm.auto import tqdm
 from PIL import Image
 from Stable_Diffusion import Diffusion_Generator
+from ipywidgets import widgets
+from IPython.display import display, clear_output
 from base import *
 class Imagination(Generator):
     def __init__(self, 
@@ -14,22 +16,27 @@ class Imagination(Generator):
         super.__init__()
         self.prompt = ["$$ in dark environment", 
                         "low-light $$"] 
-        if generator == "Stable Diffusion v1.4":
+        Stable_Diffusion_list = ["Stable Diffusion v1.4"]
+        if generator in Stable_Diffusion_list:
             self.model = Diffusion_Generator(version=generator,
                                              save_dir=save_cache)
-    
+
     def forward(self, 
                 prompt,
                 image, 
                 nums=1, 
+                check=False,
                 trial_name=None,
                 self_prompt=None,
-                **parameters):
+                parameters=None):
         
         if self_prompt != None:
             prompt = self_prompt
         else:
             prompt = re.sub('$$', prompt, self.prompt)
+        if parameters == None:
+            parameters = {'strength': 0.3, 'guidance_scale': 7.5}
+        
         init_image = Image.open(image)
         trial_name = 'Trail' if trial_name == None else trial_name
         isExist = os.path.exists('./' + trial_name + '/')
@@ -37,10 +44,32 @@ class Imagination(Generator):
             os.makedirs('./' + trial_name + '/')
         else:
             raise TrialAlreadyExistsError(trial_name)
-
-        for iter in range(nums):
+        if check == True:
+            name = ['True', 'False']
+            buttons = [widgets.Button(description=description) for description in name]
+            buttons[0].on_click(self.on_True_button_clicked)
+            buttons[1].on_click(self.on_False_button_clicked)
+            combined = widgets.HBox([items for items in  buttons])
+            out = widgets.Output()
+        for iter in tqdm(range(nums)):
             output_image = self.model(prompt=prompt,
                                       image=init_image,
                                       **parameters)
-            output_image.save('./' + trial_name + '/' + trial_name + "_" + str(iter) + '.jpg')
-        
+            if check == True:
+                display(widgets.VBox[combined, out])
+                display(output_image)
+                self.con_run = 0
+                while self.con_run == 0:
+                    pass
+                if self.con_run == 1:
+                    output_image.save('./' + trial_name + '/' + trial_name + "_" + str(iter) + '.jpg')
+                clear_output()
+            else:
+                output_image.save('./' + trial_name + '/' + trial_name + "_" + str(iter) + '.jpg')
+    
+    
+    def on_True_button_clicked(self):
+        self.con_run = 1
+    def on_False_button_clicked(self):
+        self.con_run = 2
+            
