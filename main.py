@@ -12,14 +12,16 @@ class Imagination(Generator):
     def __init__(self, 
                  save_cache=None,
                  generator="Stable Diffusion v1.4",
-                 mode="Image-to-image"):
+                 mode="Image-to-image",
+                 access_token=None):
         super().__init__()
         self.prompt = ["$$ in dark environment", 
                         "low-light $$"] 
         Stable_Diffusion_list = ["Stable Diffusion v1.4"]
         if generator in Stable_Diffusion_list:
             self.model = Diffusion_Generator(version=generator,
-                                             save_dir=save_cache)
+                                             save_dir=save_cache,
+                                             access_token=access_token)
 
     def forward(self, 
                 prompt,

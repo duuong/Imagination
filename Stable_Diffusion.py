@@ -2,10 +2,13 @@ from base import Generator
 import os
 import torch
 class Diffusion_Generator(Generator):
-    def __init__(self, version, save_dir):
+    def __init__(self, 
+                 version, 
+                 save_dir,
+                 access_token):
         from diffusers import StableDiffusionImg2ImgPipeline
-        from huggingface_hub import notebook_login
-        notebook_login()
+        from huggingface_hub import login
+        login(token=access_token)
         cache_dir = save_dir if save_dir != None else './Stable_Diffusion/cache'
         if version == 'Stable Diffusion v1.4':
             model_path = "CompVis/stable-diffusion-v1-4"    
