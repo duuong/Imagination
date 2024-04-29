@@ -33,7 +33,7 @@ class Imagination(Generator):
                 parameters=dict()):
         
         if choice_prompt != None:
-            prompt = re.sub('$$', prompt, self.prompt[choice_prompt]) 
+            prompt = re.sub(r'\$\$', prompt, self.prompt[choice_prompt]) 
         if 'strength' not in parameters:
             parameters['strength'] = 0.5
         if 'guidance_scale' not in parameters:    
@@ -58,7 +58,7 @@ class Imagination(Generator):
                                       image=init_image,
                                       **parameters)
             if check == True:
-                display(widgets.VBox[combined, out])
+                display(widgets.VBox([combined, out]))
                 display(output_image)
                 self.con_run = 0
                 while self.con_run == 0:
