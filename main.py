@@ -29,13 +29,15 @@ class Imagination(Generator):
                 nums=1, 
                 check=False,
                 trial_name=None,
-                self_prompt=False,
-                parameters=None):
+                choice_prompt=None,
+                parameters=dict()):
         
-        if self_prompt == False:
-            prompt = re.sub('$$', prompt, self.prompt)
-        if parameters == None:
-            parameters = {'strength': 0.3, 'guidance_scale': 7.5}
+        if choice_prompt != None:
+            prompt = re.sub('$$', prompt, self.prompt[choice_prompt]) 
+        if 'strength' not in parameters:
+            parameters['strength'] = 0.5
+        if 'guidance_scale' not in parameters:    
+            parameters['guidance_scale'] = 7.5
         
         init_image = Image.open(image)
         trial_name = 'Trail' if trial_name == None else trial_name
