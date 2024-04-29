@@ -29,12 +29,10 @@ class Imagination(Generator):
                 nums=1, 
                 check=False,
                 trial_name=None,
-                self_prompt=None,
+                self_prompt=False,
                 parameters=None):
         
-        if self_prompt != None:
-            prompt = self_prompt
-        else:
+        if self_prompt == False:
             prompt = re.sub('$$', prompt, self.prompt)
         if parameters == None:
             parameters = {'strength': 0.3, 'guidance_scale': 7.5}
