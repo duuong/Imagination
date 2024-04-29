@@ -70,8 +70,8 @@ class Imagination(Generator):
                 output_image.save('./' + trial_name + '/' + trial_name + "_" + str(iter) + '.jpg')
     
     
-    def on_True_button_clicked(self):
+    def on_True_button_clicked(self, b):
         self.con_run = 1
-    def on_False_button_clicked(self):
+    def on_False_button_clicked(self, b):
         self.con_run = 2
             
