@@ -8,6 +8,8 @@ from Stable_Diffusion import Diffusion_Generator
 from ipywidgets import widgets
 from IPython.display import display, clear_output
 from base import *
+import numpy as np
+import matplotlib.pyplot as plt
 class Imagination(Generator):
     def __init__(self, 
                  save_cache=None,
@@ -19,9 +21,11 @@ class Imagination(Generator):
                         "low-light $$"] 
         Stable_Diffusion_list = ["Stable Diffusion v1.4"]
         if generator in Stable_Diffusion_list:
+            if access_token is None:
+                raise Exception("Access token not found")
             self.model = Diffusion_Generator(version=generator,
                                              save_dir=save_cache,
-                                             access_token=access_token)
+                                             access_token=access_token) 
 
     def forward(self, 
                 prompt,
@@ -31,6 +35,18 @@ class Imagination(Generator):
                 trial_name=None,
                 choice_prompt=None,
                 parameters=dict()):
+        
+        def on_Next_button_clicked(b):
+            nonlocal output_image
+            output_image = self.model(prompt=prompt,
+                                        image=init_image,
+                                        **parameters)
+            nonlocal ax
+            ax.imshow(np.array(output_image))
+            plt.draw()
+        def on_True_button_clicked(b):
+            if output_image != None:
+                output_image.save('./' + trial_name + '/' + trial_name + "_" + str(iter) + '.jpg')
         
         if choice_prompt != None:
             prompt = re.sub(r'\$\$', prompt, self.prompt[choice_prompt]) 
@@ -47,31 +63,24 @@ class Imagination(Generator):
         else:
             raise TrialAlreadyExistsError(trial_name)
         if check == True:
-            name = ['True', 'False']
+            output_image = None
+            name = ['True', 'Next']
             buttons = [widgets.Button(description=description) for description in name]
-            buttons[0].on_click(self.on_True_button_clicked)
-            buttons[1].on_click(self.on_False_button_clicked)
+            buttons[0].on_click(on_True_button_clicked)
+            buttons[1].on_click(on_Next_button_clicked)
             combined = widgets.HBox([items for items in  buttons])
             out = widgets.Output()
-        for iter in tqdm(range(nums)):
-            output_image = self.model(prompt=prompt,
-                                      image=init_image,
-                                      **parameters)
-            if check == True:
-                display(widgets.VBox([combined, out]))
-                display(output_image)
-                self.con_run = 0
-                while self.con_run == 0:
-                    pass
-                if self.con_run == 1:
-                    output_image.save('./' + trial_name + '/' + trial_name + "_" + str(iter) + '.jpg')
-                clear_output()
-            else:
+            display(widgets.VBox([combined, out]))
+            fig, ax = plt.subplots()
+        else:
+            for iter in tqdm(range(nums)):
+                output_image = self.model(prompt=prompt,
+                                        image=init_image,
+                                        **parameters)
                 output_image.save('./' + trial_name + '/' + trial_name + "_" + str(iter) + '.jpg')
     
-    
-    def on_True_button_clicked(self, b):
-        self.con_run = 1
-    def on_False_button_clicked(self, b):
-        self.con_run = 2
+
+
+
+        
             
