@@ -19,7 +19,8 @@ class Imagination(Generator):
         super().__init__()
         self.prompt = ["$$ in dark environment", 
                         "low-light $$"] 
-        Stable_Diffusion_list = ["Stable Diffusion v1.4"]
+        Stable_Diffusion_list = ["Stable Diffusion v1.4",
+                                 "Small Stable Diffusion v0"]
         if generator in Stable_Diffusion_list:
             if access_token is None:
                 raise Exception("Access token not found")
