@@ -18,6 +18,8 @@ class Diffusion_Generator(Generator):
                                             model_path,
                                             torch_dtype=torch.float16,
                                             cache_dir=cache_dir + model_path,
+                                            safety_checker = None,
+                                            requires_safety_checker = False
                                         )
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.pipe = self.pipe.to(device)
