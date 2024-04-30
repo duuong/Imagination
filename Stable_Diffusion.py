@@ -16,9 +16,7 @@ class Diffusion_Generator(Generator):
             model_path = "OFA-Sys/small-stable-diffusion-v0"
         self.pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
                                             model_path,
-                                            revision="fp16", 
                                             torch_dtype=torch.float16,
-                                            use_auth_token=True,
                                             cache_dir=cache_dir + model_path,
                                         )
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
