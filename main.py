@@ -46,8 +46,10 @@ class Imagination(Generator):
             ax.imshow(np.array(output_image))
             plt.draw()
         def on_True_button_clicked(b):
+            nonlocal iter
             if output_image != None:
                 output_image.save('./' + trial_name + '/' + trial_name + "_" + str(iter) + '.jpg')
+                iter += 1
         
         if choice_prompt != None:
             prompt = re.sub(r'\$\$', prompt, self.prompt[choice_prompt]) 
@@ -71,6 +73,7 @@ class Imagination(Generator):
             buttons[1].on_click(on_Next_button_clicked)
             combined = widgets.HBox([items for items in  buttons])
             out = widgets.Output()
+            iter = 0
             display(widgets.VBox([combined, out]))
             fig, ax = plt.subplots()
         else:
