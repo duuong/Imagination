@@ -60,6 +60,7 @@ class Imagination(Generator):
             parameters['guidance_scale'] = 7.5
         
         init_image = Image.open(image)
+        init_image = init_image.resize((512, 512))
         trial_name = 'Trail' if trial_name == None else trial_name
         isExist = os.path.exists('./' + trial_name + '/')
         if not isExist:
