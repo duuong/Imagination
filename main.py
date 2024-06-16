@@ -60,7 +60,7 @@ class Imagination(Generator):
             parameters['guidance_scale'] = 7.5
         
         init_image = Image.open(image)
-        height, width = init_image.shape[0], init_image.shape[1]
+        height, width = init_image.size[0], init_image.size[1]
         if height > width: 
             scale = 512 / height
         else:
