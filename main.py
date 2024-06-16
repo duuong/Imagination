@@ -61,6 +61,11 @@ class Imagination(Generator):
         
         init_image = Image.open(image)
         height, width = init_image.shape[0], init_image.shape[1]
+        if height > width: 
+            scale = 512 / height
+        else:
+            scale = 512 / width
+        init_image = init_image.resize((int(height * scale), int(width * scale)))
         trial_name = 'Trail' if trial_name == None else trial_name
         isExist = os.path.exists('./' + trial_name + '/')
         if not isExist:
